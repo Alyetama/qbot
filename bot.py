@@ -36,36 +36,38 @@ async def on_ready() -> None:
 
 
 @bot.command('.')
-async def add_quote(ctx: Context,
-                    keyword: str,
-                    *message) -> None:
+async def add_quote(ctx: Context, *, message: Optional[str] = None) -> None:
     if not message:
         return
-    message = ' '.join(message)
+    msg_split = message.split(' ')
+    keyword = msg_split[0]
+    message = ' '.join(msg_split[1:])
     exists, values = db.insert_quote(keyword, message, ctx.author.id)
     if exists:
-        await ctx.send(f'Quote already exists: #{exists[0]}!')
+        embed = discord.Embed(title=f'❗Quote already exists: #{exists[0]}!')
+        await ctx.send(embed=embed)
     else:
         print([ctx.guild.name, ctx.guild.id, *values])
-        await ctx.send(f'Added: #{values[0]}')
+        embed = discord.Embed(title=f'✅ Added: #{values[0]}')
+        await ctx.send(embed=embed)
 
 
 @bot.command('..')
 async def get_quote(ctx: Context, keyword: str) -> None:
     results = db.fetch_quote(keyword)
     if results:
-        await ctx.send(f'#{results[0]}: {results[1]}')
+        await ctx.send(f'`#{results[0]}` 💬 {results[1]}')
 
 
 @bot.command('qdel')
 async def del_quote(ctx: Context, _id: int) -> None:
     db.delete_quote(_id, ctx.author.id)
-    await ctx.send(f'Deleted #{_id}')
+    embed = discord.Embed(title=f'❌ Deleted #{_id}')
+    await ctx.send(embed=embed)
 
 
 @bot.command('qinfo')
 async def get_quote_info(ctx: Context, _id: int) -> None:
-    print(type(ctx))
     result = db.fetch_by_id(_id)
     if not result:
         return
@@ -83,7 +85,7 @@ async def get_quote_info(ctx: Context, _id: int) -> None:
 async def get_quote(ctx: Context) -> None:
     results = db.fetch_random_quote()
     if results:
-        await ctx.send(f'#{results[0]}: {results[1]}')
+        await ctx.send(f'`#{results[0]}` 💬 {results[1]}')
 
 
 def main() -> None:

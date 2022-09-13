@@ -69,7 +69,6 @@ class Database:
             FROM quotes WHERE id=?''', (_id, )).fetchone()
 
     def fetch_random_quote(self) -> tuple:
-        quotes = self.cur.execute(
-            'SELECT id, message FROM quotes').fetchall()
+        quotes = self.cur.execute('SELECT id, message FROM quotes').fetchall()
         if quotes:
             return random.choice(quotes)
