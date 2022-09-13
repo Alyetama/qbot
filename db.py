@@ -57,7 +57,8 @@ class Database:
         quotes = self.cur.execute(
             'SELECT id, message FROM quotes WHERE keyword=?',
             (keyword, )).fetchall()
-        return random.choice(quotes)
+        if quotes:
+            return random.choice(quotes)
 
     def delete_quote(self, _id: int, user_id: int) -> None:
         self.cur.execute('DELETE FROM quotes WHERE id=? AND user_id=?',

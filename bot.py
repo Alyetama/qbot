@@ -35,7 +35,7 @@ async def on_ready() -> None:
     print('-' * 80)
 
 
-@bot.command('.')
+@bot.command('qa', aliases=['.'])
 async def add_quote(ctx: Context, *, message: Optional[str] = None) -> None:
     if not message:
         return
@@ -52,21 +52,21 @@ async def add_quote(ctx: Context, *, message: Optional[str] = None) -> None:
         await ctx.send(embed=embed)
 
 
-@bot.command('..')
+@bot.command('q', aliases=['..'])
 async def get_quote(ctx: Context, keyword: str) -> None:
     results = db.fetch_quote(keyword)
     if results:
         await ctx.send(f'`#{results[0]}` 💬 {results[1]}')
 
 
-@bot.command('qdel')
+@bot.command('qdel', aliases=['qd'])
 async def del_quote(ctx: Context, _id: int) -> None:
     db.delete_quote(_id, ctx.author.id)
     embed = discord.Embed(title=f'❌ Deleted #{_id}')
     await ctx.send(embed=embed)
 
 
-@bot.command('qinfo')
+@bot.command('qinfo', aliases=['qi'])
 async def get_quote_info(ctx: Context, _id: int) -> None:
     result = db.fetch_by_id(_id)
     if not result:
@@ -81,7 +81,7 @@ async def get_quote_info(ctx: Context, _id: int) -> None:
                    embed=embed)
 
 
-@bot.command('qrand')
+@bot.command('qrand', aliases=['qr'])
 async def get_quote(ctx: Context) -> None:
     results = db.fetch_random_quote()
     if results:
