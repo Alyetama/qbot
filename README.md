@@ -48,4 +48,4 @@ docker run \
 
 ## 🗒️ Notes
 
-- Discord now requires `Message Content Intent` to be turned on to handle the content of messages. Make sure you have it turned on for your bot in the developer portal: `Bot` -> `Message Content Intent`.
+- Discord now requires `Message Content Intent` to be turned on to handle the content of messages. Make sure you have it turned on for your bot in the developer portal: `Bot` -> `Privileged Gateway Intents` -> `Message Content Intent`.
