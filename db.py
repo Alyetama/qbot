@@ -14,7 +14,7 @@ class Database:
         self.con = sqlite3.connect(db_file, isolation_level=None)
         self.cur = self.con.cursor()
 
-    def db_engine(self) -> None:
+    def start(self) -> None:
         try:
             self.cur.execute('''CREATE TABLE quotes(
                 id INTEGER PRIMARY KEY,
@@ -67,3 +67,9 @@ class Database:
         return self.cur.execute(
             '''SELECT id, user_id, keyword, message, created_on
             FROM quotes WHERE id=?''', (_id, )).fetchone()
+
+    def fetch_random_quote(self) -> tuple:
+        quotes = self.cur.execute(
+            'SELECT id, message FROM quotes').fetchall()
+        if quotes:
+            return random.choice(quotes)

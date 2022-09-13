@@ -19,6 +19,7 @@ bot = commands.Bot(command_prefix='.',
                    description='A Discord bot to save custom quotes.')
 
 db = Database()
+db.start()
 
 
 def keyboard_interrupt_handler(sig: int, _) -> None:
@@ -37,9 +38,10 @@ async def on_ready() -> None:
 @bot.command('.')
 async def add_quote(ctx: Context,
                     keyword: str,
-                    message: Optional[str] = None) -> None:
+                    *message) -> None:
     if not message:
         return
+    message = ' '.join(message)
     exists, values = db.insert_quote(keyword, message, ctx.author.id)
     if exists:
         await ctx.send(f'Quote already exists: #{exists[0]}!')
@@ -75,6 +77,13 @@ async def get_quote_info(ctx: Context, _id: int) -> None:
         colour=discord.Colour.blue())
     await ctx.send(allowed_mentions=discord.AllowedMentions.none(),
                    embed=embed)
+
+
+@bot.command('qrand')
+async def get_quote(ctx: Context) -> None:
+    results = db.fetch_random_quote()
+    if results:
+        await ctx.send(f'#{results[0]}: {results[1]}')
 
 
 def main() -> None:
