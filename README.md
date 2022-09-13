@@ -21,8 +21,21 @@ pip install -r requirements.txt
 - Then, run:
 
 ```sh
-python bot.py
+python bot.py  # For verbose output, pass: `--print-logs`
 ```
+
+## 🐳 Docker
+
+```shell
+export TOKEN="xxxxxxxxxxxxxxxxxxxxxx"
+
+docker run \
+  -d --restart unless-stopped \
+  -e TOKEN="${TOKEN}" \
+  -v "${PWD}/database":/database \
+  alyetama/qbot:latest
+```
+
 
 ## 🤖 Commands
 
@@ -31,3 +44,8 @@ python bot.py
 - To get a quote info by id: `.qinfo <quote_id>`
 - To delete a quote: `.qdel <quote_id>`
 - To get a random quote: `.qrand`
+
+
+## 🗒️ Notes
+
+- Discord now requires `Message Content Intent` to be turned on to handle the content of messages. Make sure you have it turned on for your bot in the developer portal: `Bot` -> `Message Content Intent`.

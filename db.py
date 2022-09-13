@@ -10,7 +10,7 @@ from typing import Tuple, Union, Optional
 
 class Database:
 
-    def __init__(self, db_file: str = 'qbot_db.db'):
+    def __init__(self, db_file: str = 'database/qbot.db'):
         self.con = sqlite3.connect(db_file, isolation_level=None)
         self.cur = self.con.cursor()
 

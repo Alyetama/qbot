@@ -14,6 +14,12 @@ from dotenv import load_dotenv
 from db import Database
 
 intents = discord.Intents.default()
+try:
+    intents.message_content = True
+except AttributeError:
+    print(f'WARNING: detected version is {discord.__version__}! '
+          'Upgrade `discord.py` to use `intents.message_content`.')
+
 bot = commands.Bot(command_prefix='.',
                    intents=intents,
                    description='A Discord bot to save custom quotes.')
@@ -47,7 +53,8 @@ async def add_quote(ctx: Context, *, message: Optional[str] = None) -> None:
         embed = discord.Embed(title=f'❗Quote already exists: #{exists[0]}!')
         await ctx.send(embed=embed)
     else:
-        print([ctx.guild.name, ctx.guild.id, *values])
+        if '--print-logs' in sys.argv:
+            print([ctx.guild.name, ctx.guild.id, *values])
         embed = discord.Embed(title=f'✅ Added: #{values[0]}')
         await ctx.send(embed=embed)
 
